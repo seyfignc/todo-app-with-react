@@ -1,26 +1,81 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { Component } from 'react';
 import './App.css';
+import TodoList from './TodoList'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      newItem: "",
+      list: []
+    }
+  }
+  updateInput(key, value) {
+    this.setState({
+      [key]: value
+    });
+  }
+
+  addItem() {
+    const newItem = {
+      id: 1 + Math.random(),
+      value: this.state.newItem.slice(),
+      IsCompleted: false
+    }
+
+    const list = [...this.state.list];
+
+    list.push(newItem);
+
+    this.setState({
+      list: list,
+      newItem: ""
+    });
+
+  }
+
+  itemDeleted=(item)=> {
+
+    const filteredItems= this.state.list.filter(x =>
+      x.id!==item.id);
+    this.setState({
+      list: filteredItems
+    })
+  }
+
+  itemCompleted = (item) => {
+    let key=item.id;
+    this.setState(prevState => ({
+      list: prevState.list.map(x => x.id === key
+        ? { ...x, IsCompleted: !x.IsCompleted }
+        : x
+      )
+    
+    }));
+  }
+
+  render() {
+    return (
+      <div className="App">
+        <div>
+          Ekleme Yap...
+              <br />
+          <input
+            type="text"
+            placeholder="Birşeyler yaz..."
+            value={this.state.newItem}
+            onChange={e => this.updateInput("newItem", e.target.value)}
+          />
+          <button onClick={() => this.addItem()}>
+            Ekle
+              </button>
+          <br />
+          <TodoList items={this.state.list} itemCompleted={this.itemCompleted} itemDeleted={this.itemDeleted} />
+
+        </div>
+      </div>
+    );
+  }
 }
 
 export default App;
