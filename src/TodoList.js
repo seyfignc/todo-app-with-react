@@ -4,7 +4,7 @@ class TodoList extends Component {
     render() {
         const listItems = this.props.items;
         const TodoLine={
-            backgroundColor:"red",
+            backgroundColor:"blue",
             color:"yellow",
             width:"300px",
             margin:"0 auto",
